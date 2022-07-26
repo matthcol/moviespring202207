@@ -8,6 +8,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "people")
+@NamedQuery(
+        name = "People.findByYear",
+        query = "from People p where YEAR(p.birthdate) = :year"
+)
 @Getter
 @Setter
 @NoArgsConstructor

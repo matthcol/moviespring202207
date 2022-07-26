@@ -10,6 +10,9 @@ import javax.persistence.EntityManager;
 @DataJpaTest
 public class TestMovieRepositoryCriteria {
 
+    // TODO: to improve type safety use annotation class Movie_
+    // https://docs.jboss.org/hibernate/orm/5.6/topical/html_single/metamodelgen/MetamodelGenerator.html
+
     @Autowired
     EntityManager entityManager;
 

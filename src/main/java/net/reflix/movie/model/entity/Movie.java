@@ -11,13 +11,14 @@ import java.util.List;
         name = "movies",
         uniqueConstraints = @UniqueConstraint(columnNames = {"title", "myear"})
 )
+@NamedEntityGraph(name = "Movie.director", attributeNodes = @NamedAttributeNode("director"))
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor(staticName = "of")
 @AllArgsConstructor(staticName = "of")
 @Builder
-@ToString(exclude = {"director", "actor"})
+@ToString(exclude = {"director", "actors"})
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +44,8 @@ public class Movie {
     @Enumerated(EnumType.STRING)
     private ColorEnum color;
 
-    @Transient
+    @ManyToOne(fetch = FetchType.LAZY) // default EAGER
+    @JoinColumn(name="id_director", nullable = true)
     private People director;
 
     @Transient

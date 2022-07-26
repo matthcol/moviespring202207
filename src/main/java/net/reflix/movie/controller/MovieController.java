@@ -13,9 +13,6 @@ import java.util.List;
 @RequestMapping("api/movie")
 public class MovieController {
 
-    @Autowired
-    private IMovieRepository movieRepository;
-
     @GetMapping
     public List<MovieDto> getAll() {
         return List.of(

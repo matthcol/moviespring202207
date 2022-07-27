@@ -24,10 +24,10 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer>
 
     Stream<Movie> findByDirectorName(String name);
 
-    @EntityGraph("Movie.director") // graph is defined in entity Movie
+    @EntityGraph("Movie.directorAndActors") // graph is defined in entity Movie
     Stream<Movie> findByYear(int year);
 
-    @EntityGraph(attributePaths = "director") // graph is defined ad hoc here
+    @EntityGraph(attributePaths = {"director", "actors" }) // graph is defined ad hoc here
     Stream<Movie> findByYearBetween(int year1, int year2);
 
     // JPQK Queries

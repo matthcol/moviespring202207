@@ -4,6 +4,7 @@ import lombok.*;
 import net.reflix.movie.model.enums.ColorEnum;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,7 +12,11 @@ import java.util.List;
         name = "movies",
         uniqueConstraints = @UniqueConstraint(columnNames = {"title", "year"})
 )
-@NamedEntityGraph(name = "Movie.director", attributeNodes = @NamedAttributeNode("director"))
+@NamedEntityGraph(name = "Movie.directorAndActors",
+        attributeNodes = {
+                @NamedAttributeNode("director"),
+                @NamedAttributeNode("actors")}
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,8 +34,8 @@ public class Movie {
     private String title;
 
     @NonNull
-    @Column(name = "year", nullable = false)
-    //@Column(name = "\"year\"")
+    //@Column(name = "year", nullable = false)
+    @Column(name = "\"year\"")
    // @Column(name = "myear", nullable = false)
     private Integer year;
 
@@ -54,5 +59,6 @@ public class Movie {
             joinColumns = @JoinColumn(name = "id_movie"),
             inverseJoinColumns = @JoinColumn(name ="id_actor")
     )
-    private List<People> actors;
+    @Builder.Default // for lombock to respect this initialization by defaut
+    private List<People> actors = new ArrayList<>();
 }

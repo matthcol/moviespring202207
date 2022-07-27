@@ -5,6 +5,8 @@ import net.reflix.movie.model.entity.People;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Example;
@@ -16,9 +18,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
 public class TestMovieRepositoryQueries {
 
     @Autowired
@@ -60,6 +67,8 @@ public class TestMovieRepositoryQueries {
         entityManager.clear();
     }
 
+    // NB: can be used on the class also for all tests
+    // @Rollback(value = false)
     @Test
     public void testFindByIdPresent() {
         // facts

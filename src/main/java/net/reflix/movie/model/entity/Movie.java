@@ -48,6 +48,10 @@ public class Movie {
     @JoinColumn(name="id_director", nullable = true)
     private People director;
 
-    @Transient
+    @ManyToMany
+    @JoinTable(name = "play",
+            joinColumns = @JoinColumn(name = "id_movie"),
+            inverseJoinColumns = @JoinColumn(name ="id_actor")
+    )
     private List<People> actors;
 }

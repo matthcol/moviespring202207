@@ -1,5 +1,7 @@
 package net.reflix.movie.repository;
 
+import net.reflix.movie.model.dto.DirectorStats;
+import net.reflix.movie.model.dto.IDirectorStats;
 import net.reflix.movie.model.entity.Movie;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,6 +37,20 @@ public interface IMovieRepository extends JpaRepository<Movie, Integer>
     @Query("from Movie m where m.title = :title and m.year between :year1 and :year2")
     Stream<Movie> findByPEMovies(String title, int year1, int year2);
 
+    @Query("select new net.reflix.movie.model.dto.DirectorStats(d.name, COUNT(m) as countMovie) "
+        + " from Movie m join m.director d "
+        + " group by d "
+        + " having COUNT(m) > :minCount"
+        + " order by countMovie desc")
+    Stream<DirectorStats> getDirectorStats(Long minCount);
 
+    @Query("select d.name as name, "
+            + "    COUNT(m) as countMovie, "
+            + "    COALESCE(SUM(m.duration), 0) as durationTotal "
+            + " from Movie m join m.director d "
+            + " group by d "
+            + " having COUNT(m) > :minCount"
+            + " order by countMovie desc")
+    Stream<IDirectorStats> getDirectorStats2(Long minCount);
 
 }

@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(
         name = "movies",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"title", "myear"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"title", "year"})
 )
 @NamedEntityGraph(name = "Movie.director", attributeNodes = @NamedAttributeNode("director"))
 @Getter
@@ -29,19 +29,20 @@ public class Movie {
     private String title;
 
     @NonNull
-    // @Column(name = "\"year\"")
-    @Column(name = "myear", nullable = false)
+    @Column(name = "year", nullable = false)
+    //@Column(name = "\"year\"")
+   // @Column(name = "myear", nullable = false)
     private Integer year;
 
     @Column(nullable = true)
     private Integer duration;
 
     @Column(nullable = true, length = 500)
-    private String synopsys;
+    private String synopsis;
 
-    // @Transient // do not persist
-    @Column(nullable = true)
-    @Enumerated(EnumType.STRING)
+    @Transient // do not persist
+    // @Column(nullable = true)
+    // @Enumerated(EnumType.STRING)
     private ColorEnum color;
 
     @ManyToOne(fetch = FetchType.LAZY) // default EAGER

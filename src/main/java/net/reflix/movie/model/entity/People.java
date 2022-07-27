@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
-@Table(name = "people")
+@Table(name = "stars")  // people
 @NamedQuery(
         name = "People.findByYear",
         query = "from People p where YEAR(p.birthdate) = :year"
@@ -18,6 +18,7 @@ import java.util.Date;
 @AllArgsConstructor(staticName = "of")
 @RequiredArgsConstructor(staticName = "of")
 @Builder
+@ToString
 public class People {
 
     @Id

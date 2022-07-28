@@ -2,23 +2,25 @@ package net.reflix.movie.controller;
 
 import net.reflix.movie.model.dto.MovieDto;
 import net.reflix.movie.repository.IMovieRepository;
+import net.reflix.movie.service.IMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
 @RequestMapping("api/movie")
 public class MovieController {
 
+    @Autowired
+    private IMovieService movieService;
+
     @GetMapping
     public List<MovieDto> getAll() {
-        return List.of(
-                MovieDto.of("Thor: Love and Thunder", 2022),
-                MovieDto.of("Top Gun: Maverick", 2022),
-                MovieDto.of("Taxi Driver", 2022));
+        return movieService.getAll();
     }
 
     /**
@@ -28,12 +30,11 @@ public class MovieController {
      * @return
      */
     @GetMapping("{id}")
-    public MovieDto getById(@PathVariable("id") int id) {
-        return MovieDto.builder()
-                .id(id)
-                .title("Thor: Love and Thunder")
-                .year(2022)
-                .build();
+    public Optional<MovieDto> getById(@PathVariable("id") int id) {
+        // NB: other possibility, empty Optional => 404 Not found
+       //  return movieService.getById(id);
+        return Optional.of(MovieDto.builder()
+                .id(1).title("Top Gun: Maverick").year(2022).build());
     }
 
     /**
@@ -54,8 +55,7 @@ public class MovieController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MovieDto addMovie(@RequestBody MovieDto movie) {
-        movie.setId(12);
-        return movie;
+        return movieService.save(movie);
     }
 
     @PutMapping("{id}")
@@ -63,13 +63,15 @@ public class MovieController {
             @PathVariable("id") int id,
             @RequestBody MovieDto movie)
     {
-        return movie;
+        // TODO: error if id <> movie.id
+        return movieService.update(movie);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMovie(@PathVariable("id") int id) {
-
+        // TODO: 404 if id not found
+        var ok = movieService.delete(id);
     }
 
 

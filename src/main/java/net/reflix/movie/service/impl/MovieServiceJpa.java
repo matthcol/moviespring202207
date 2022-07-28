@@ -92,6 +92,9 @@ public class MovieServiceJpa implements IMovieService {
 
     @Override
     public boolean delete(int id) {
-        return false;
+        var movieEntityOpt = movieRepository.findById(id);
+        movieEntityOpt.ifPresent(m->
+                movieRepository.delete(m));
+        return movieEntityOpt.isPresent();
     }
 }

@@ -1,20 +1,31 @@
 package net.reflix.movie.controller;
 
+import net.reflix.movie.handler.dto.ApiError;
+import net.reflix.movie.handler.dto.ValidationError;
 import net.reflix.movie.model.dto.MovieDetailDto;
 import net.reflix.movie.model.dto.MovieDto;
 import net.reflix.movie.repository.IMovieRepository;
 import net.reflix.movie.service.IMovieService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+
 
 
 @RestController
 @RequestMapping("api/movie")
 public class MovieController {
+
+    // logger sl4j
+    private Logger logger = LoggerFactory.getLogger(MovieController.class);
 
     @Autowired
     private IMovieService movieService;
@@ -31,9 +42,11 @@ public class MovieController {
      * @return
      */
     @GetMapping("{id}")
-    public Optional<MovieDetailDto> getById(@PathVariable("id") int id) {
+    public MovieDetailDto getById(@PathVariable("id") int id) {
         // NB: other possibility, empty Optional => 404 Not found
-       return movieService.getById(id);
+        logger.info("GET ****************************");
+       return movieService.getById(id)
+               .orElseThrow();
        // return Optional.of(MovieDto.builder()
        //         .id(1).title("Top Gun: Maverick").year(2022).build());
     }
@@ -55,14 +68,17 @@ public class MovieController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MovieDto addMovie(@RequestBody MovieDto movie) {
-        return movieService.save(movie);
+    public MovieDto addMovie(@Valid @RequestBody MovieDto movie) {
+        logger.debug("about to save movie");
+        var res =  movieService.save(movie);
+        logger.info("movie added");
+        return res;
     }
 
     @PutMapping("{id}")
     public MovieDto updateMovie(
             @PathVariable("id") int id,
-            @RequestBody MovieDto movie)
+            @Valid @RequestBody MovieDto movie)
     {
         // TODO: error if id <> movie.id
         return movieService.update(movie);
@@ -86,9 +102,17 @@ public class MovieController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteMovie(@PathVariable("id") int id) {
+    public ResponseEntity<?> deleteMovie(@PathVariable("id") int id) {
         // TODO: 404 if id not found
-        var ok = movieService.delete(id);
+        if (movieService.delete(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiError.of(
+                            HttpStatus.NOT_FOUND,
+                            "No Data Found to delete",
+                            List.of()));
+        }
     }
 
 

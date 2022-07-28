@@ -1,5 +1,6 @@
 package net.reflix.movie.service;
 
+import net.reflix.movie.model.dto.MovieDetailDto;
 import net.reflix.movie.model.dto.MovieDto;
 
 import java.util.Collection;
@@ -8,13 +9,13 @@ import java.util.Optional;
 
 public interface IMovieService {
 
-    Optional<MovieDto> getById(int id);
+    Optional<MovieDetailDto> getById(int id);
     List<MovieDto> getAll();
     MovieDto save(MovieDto movieDto);
     MovieDto update(MovieDto movieDto);
-    boolean setDirector(int idMovie, int idPeople);
-    boolean addActor(int idMovie, int idPeople);
-    boolean setActors(int idMovie, Collection<Integer> idsPeople);
+    Optional<MovieDetailDto> setDirector(int idMovie, int idPeople);
+    Optional<MovieDetailDto> addActor(int idMovie, int idPeople);
+    Optional<MovieDetailDto> setActors(int idMovie, Collection<Integer> idsPeople);
     boolean delete(int id);
 
 }

@@ -24,7 +24,7 @@ public class TestMovieDto {
         var movie = MovieDto.builder()
                 .id(12)
                 .title("Top Gun: Maverick")
-                .year(2022)
+                .yearRealease(2022)
                 .synopsis("Movie with planes")
                 .build();
     }

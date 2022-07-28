@@ -5,7 +5,9 @@ import net.reflix.movie.model.enums.ColorEnum;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(
@@ -35,7 +37,7 @@ public class Movie {
 
     @NonNull
     //@Column(name = "year", nullable = false)
-    @Column(name = "\"year\"")
+    @Column(name = "\"year\"", nullable = false)
    // @Column(name = "myear", nullable = false)
     private Integer year;
 
@@ -60,5 +62,8 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name ="id_actor")
     )
     @Builder.Default // for lombock to respect this initialization by defaut
-    private List<People> actors = new ArrayList<>();
+    private Set<People> actors = new HashSet<>();
+
+    // NB: Set allow fine DML synchro
+    //      List provoke delete + n insert each time list is modified
 }

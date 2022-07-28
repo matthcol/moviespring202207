@@ -16,7 +16,7 @@ public class MovieDto {
     private String title;
 
     @NonNull
-    private Integer year;
+    private Integer yearRelease;
 
     private Integer duration;
 

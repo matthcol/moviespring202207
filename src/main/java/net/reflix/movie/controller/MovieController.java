@@ -1,5 +1,6 @@
 package net.reflix.movie.controller;
 
+import net.reflix.movie.model.dto.MovieDetailDto;
 import net.reflix.movie.model.dto.MovieDto;
 import net.reflix.movie.repository.IMovieRepository;
 import net.reflix.movie.service.IMovieService;
@@ -30,11 +31,11 @@ public class MovieController {
      * @return
      */
     @GetMapping("{id}")
-    public Optional<MovieDto> getById(@PathVariable("id") int id) {
+    public Optional<MovieDetailDto> getById(@PathVariable("id") int id) {
         // NB: other possibility, empty Optional => 404 Not found
-       //  return movieService.getById(id);
-        return Optional.of(MovieDto.builder()
-                .id(1).title("Top Gun: Maverick").year(2022).build());
+       return movieService.getById(id);
+       // return Optional.of(MovieDto.builder()
+       //         .id(1).title("Top Gun: Maverick").year(2022).build());
     }
 
     /**
@@ -65,6 +66,22 @@ public class MovieController {
     {
         // TODO: error if id <> movie.id
         return movieService.update(movie);
+    }
+
+    @PatchMapping("director/{idMovie}")
+    public Optional<MovieDetailDto> setDirector(
+            @PathVariable("idMovie") int idMovie,
+            @RequestParam("did") int idDirector)
+    {
+        return movieService.setDirector(idMovie, idDirector);
+    }
+
+    @PatchMapping("actors/add/{idMovie}")
+    public Optional<MovieDetailDto> addActor(
+            @PathVariable("idMovie") int idMovie,
+            @RequestParam("aid") int idActor)
+    {
+        return movieService.addActor(idMovie, idActor);
     }
 
     @DeleteMapping("{id}")

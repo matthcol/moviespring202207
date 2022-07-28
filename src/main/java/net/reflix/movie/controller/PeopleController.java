@@ -1,10 +1,12 @@
 package net.reflix.movie.controller;
 
 import net.reflix.movie.model.dto.PeopleDto;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
+@Secured("ADMIN")
 @RestController
 @RequestMapping("api/people")
 public class PeopleController {
